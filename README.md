@@ -4,7 +4,7 @@
 ##### A botnet client for native execution across supported networks for remote functionality.
 
 
-##### nce completed, this bot will synchronize across a network of similar bots, mirroring the actions commanded by host commands provided.
+##### Once completed, this bot will synchronize across a network of similar bots, mirroring them by executing actions stated by host commands provided.
 
 
 Default protocol of communication is IRC.

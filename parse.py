@@ -17,39 +17,7 @@
 	along with this program.  If not,see <http://www.gnu.org/licenses/>.
 '''
 
-if __name__ == '__main__':
-    import Botato
-    raise SystemExit(Botato.main())
-
-import os
-import sys
-
-class Botato(object):
-	'Outermost structure class for the Botato Program'
-	version={'Number': '0.1', 'Type': 'Beta'}
-    
-	def __init__(self):
-		self.start=True
-		self.ready=False
-		
-	def include(self):
-		try:
-			import irc
-			import parse
-			
-			return True
-		except Exception as e:
-			print(e.args)
-			return False
-		
-	def begin(self,readynow):
-		self.ready=readynow
-		if self.ready:
-			#All set to begin bot functions
-			connection=IRC("irc.jamezq.com",6667)
-			connection.connect()
-			connection.startListening()
-
-def main():
-	bot=Botato()
-	bot.begin(bot.include())
+class Parse(object):
+	'Interprets incoming commands and directs bot to respond accordingly'
+	
+	pass

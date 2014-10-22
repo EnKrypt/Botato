@@ -17,39 +17,32 @@
 	along with this program.  If not,see <http://www.gnu.org/licenses/>.
 '''
 
-if __name__ == '__main__':
-    import Botato
-    raise SystemExit(Botato.main())
+import socket
 
-import os
-import sys
-
-class Botato(object):
-	'Outermost structure class for the Botato Program'
-	version={'Number': '0.1', 'Type': 'Beta'}
-    
-	def __init__(self):
-		self.start=True
-		self.ready=False
+class IRC(object):
+	'Wrapper for integrated communication over the IRC protocol'
+	PONG="PONG"
+	
+	prefix="P"
+	
+	def __init__(self,host,port=6667,channel="botato"):
+		self.host=host
+		self.port=port
+		self.channel="#"+channel
+		self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.nowlistening=False
 		
-	def include(self):
-		try:
-			import irc
-			import parse
-			
-			return True
-		except Exception as e:
-			print(e.args)
-			return False
-		
-	def begin(self,readynow):
-		self.ready=readynow
-		if self.ready:
-			#All set to begin bot functions
-			connection=IRC("irc.jamezq.com",6667)
-			connection.connect()
-			connection.startListening()
-
-def main():
-	bot=Botato()
-	bot.begin(bot.include())
+	def connect(self):
+		print("Connecting to "+self.host+" on channel "+self.channel+" via port "+self.port)
+		irc.connect((self.host, self.port))
+		irc.send("USER "+IRC.prefix+"\"\" \"\" :Botato\r\n")
+		irc.send("NICK "+IRC.prefix+"\r\n")
+		irc.send("JOIN "+self.channel+"\r\n")
+	
+	def startlistening(self):
+		self.nowlistening=True
+		while 1:
+			text=self.sock.recv(2040)
+			print(text)
+			if text.find('PING') != -1:
+				self.sock.send('PONG ' + text.split() [1] + '\r\n')

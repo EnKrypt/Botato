@@ -32,17 +32,23 @@ class IRC(object):
 		self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.nowlistening=False
 		
+	def send(self,data):
+		self.sock.send(data.encode())
+		
+	def read(self):
+		return self.sock.recv(2040).decode()
+		
 	def connect(self):
-		print("Connecting to "+self.host+" on channel "+self.channel+" via port "+self.port)
-		irc.connect((self.host, self.port))
-		irc.send("USER "+IRC.prefix+"\"\" \"\" :Botato\r\n")
-		irc.send("NICK "+IRC.prefix+"\r\n")
-		irc.send("JOIN "+self.channel+"\r\n")
+		print("Connecting to "+self.host+" on channel "+self.channel+" via port "+str(self.port))
+		self.sock.connect((self.host, self.port))
+		self.send("USER "+IRC.prefix+" \"\" \"\" :Botato\r\n")
+		self.send("NICK "+IRC.prefix+"\r\n")
+		self.send("JOIN "+self.channel+"\r\n")
 	
-	def startlistening(self):
+	def startListening(self):
 		self.nowlistening=True
 		while 1:
-			text=self.sock.recv(2040)
+			text=self.read()
 			print(text)
-			if text.find('PING') != -1:
-				self.sock.send('PONG ' + text.split() [1] + '\r\n')
+			if text.find('PING')!=-1:
+				self.send('PONG '+text.split()[1]+'\r\n')

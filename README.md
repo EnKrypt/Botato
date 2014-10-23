@@ -38,4 +38,3 @@ Note that the terms `client` and `bot` are nuanced and for general purposes here
 		8. !screenshot \<nick\> / !ss \<nick\>- The bot identified by the `nick` given takes a screencap of the client's screen(if GUI enabled) and uploads the image to an image host(such as imgur) and returns the url to the host network. If no `param` is provided, this command is executed by all bots across the network.
 5. Offline database:
 	* Data stored locally over no network for future access by host (or on re-connection if the client side network was originally down)
-

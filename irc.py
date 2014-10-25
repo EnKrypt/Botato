@@ -20,6 +20,8 @@
 import sys
 import socket
 
+import parse
+
 class IRC(object):
 	'Wrapper for integrated communication over the IRC protocol'
 	PONG="PONG"
@@ -51,8 +53,9 @@ class IRC(object):
 		while 1:
 			text=self.read()
 			print(text)
-			if text.find('PING')!=-1:
-				self.send('PONG '+text.split()[1]+'\r\n')
+			if parse.Parse.parsetext(text)!=None:
+				self.send(parse.Parse.parsetext(text)+'\r\n')
+				print("Sent: "+parse.Parse.parsetext(text))
 				
 	def provideConsole(self,inp):
 		for line in inp:

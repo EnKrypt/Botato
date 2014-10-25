@@ -23,13 +23,14 @@ if __name__ == '__main__':
 
 import os
 import sys
+import threading
 
 import irc
 import parse
 
 class Botato(object):
 	'Outermost structure class for the Botato Program'
-	version={'Number': '0.1', 'Type': 'Beta'}
+	version={"Number": "0.1", "Type": "Beta"}
     
 	def __init__(self):
 		self.start=True
@@ -37,7 +38,9 @@ class Botato(object):
 	def begin(self):
 		connection=irc.IRC("irc.jamezq.com",6667)
 		connection.connect()
-		connection.startListening()
+		
+		tolisten=threading.Thread(target=connection.startListening()).start()
+		toconsole=threading.Thread(target=connection.provideConsole()).start() #to be fixed
 
 def main():
 	bot=Botato()

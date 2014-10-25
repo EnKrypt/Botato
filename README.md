@@ -29,7 +29,7 @@ Note that the terms `client` and `bot` are nuanced and for general purposes here
 	* Bot should be able to connect to a job/task provider and accept tasks that are then executed and the result(if any) is returned to the host network. Work on task-cache(secondary feature to be implemented later) is necessary to avoid unnecessary waste of time/resources in sending and receiving single tasks when a group of them can be sent/received together.
 	* <h4>Planned commands:</h4> [required parameter], \<optional parameter\>
 		1. !init - To perform initial configurations on the host network, containing everything needed to get a new bot up and running.
-		2. !ping \<param\> - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it responds with the delay time between reading and responding.
+		2. !ping \<param\> - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it simply responds with 'Pong'.
 		3. !ip \<global | local\>- Grabs the global or local IP address of the client and returns it to the host network. If no `param` is given, it defaults to `global`.
 		4. !update \<version no.\> - Force auto-update, such as if for some reason the auto-updater fails to work. If no `param` is given, the latest version is fetched.
 		5. !download [url] - Fetched resource locally from the path specified in the `param`.

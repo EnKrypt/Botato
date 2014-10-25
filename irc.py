@@ -17,6 +17,7 @@
 	along with this program.  If not,see <http://www.gnu.org/licenses/>.
 '''
 
+import sys
 import socket
 
 class IRC(object):
@@ -52,3 +53,10 @@ class IRC(object):
 			print(text)
 			if text.find('PING')!=-1:
 				self.send('PONG '+text.split()[1]+'\r\n')
+				
+	def provideConsole(self,inp):
+		for line in inp:
+			if line.startswith("/"):
+				self.send(line[1])
+			else:
+				self.send("PRIVMSG "+self.channel+" :"+line)

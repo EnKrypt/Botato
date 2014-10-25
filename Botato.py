@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
 import os
 import sys
-import _thread as thread
+import threading
 
 import irc
 import parse
@@ -38,11 +38,9 @@ class Botato(object):
 	def begin(self):
 		connection=irc.IRC("irc.jamezq.com",6667)
 		connection.connect()
-		try:
-			thread.start_new_thread(connection.startListening())
-		except:
-			print("Error: Could not start listening thread");
-		#Other statements here will run simultaneously
+		
+		tolisten=threading.Thread(target=connection.startListening()).start()
+		toconsole=threading.Thread(target=connection.provideConsole()).start() #to be fixed
 
 def main():
 	bot=Botato()

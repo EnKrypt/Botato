@@ -21,11 +21,11 @@ class Parse(object): #A class for a single static method is not needed. Removal 
 	'Interprets incoming commands and directs bot to respond accordingly'
 	
 	def parsetext(text,con):
-		com=text.split(' ',3)
+		com=text.split(" ",3)
 		try:
-			if com[0]=='PING':
-				return 'PONG '+text.split()[1]
-			elif (com[3].strip()+' ').startswith(':!ping '):
+			if com[0]=="PING":
+				return "PONG "+text.split()[1]
+			elif (com[3].strip()+" ").startswith(":!ping "):
 				if com[3].strip().endswith("!ping"):
 					return "PRIVMSG "+con.channel+" :Pong"
 				else:

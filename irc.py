@@ -54,7 +54,7 @@ class IRC(object):
 			text=self.read()
 			print(text)
 			if parse.Parse.parsetext(text,self)!=None:
-				self.send(parse.Parse.parsetext(text,self)+'\r\n')
+				self.send(parse.Parse.parsetext(text,self)+"\r\n")
 				print("Sent: "+parse.Parse.parsetext(text,self))
 				
 	def provideConsole(self,inp):

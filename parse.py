@@ -30,6 +30,14 @@ class Parse(object): #A class for a single static method is not needed. Removal 
 					return "PRIVMSG "+con.channel+" :Pong"
 				else:
 					return "PRIVMSG "+con.channel+" :Pong"+com[3].strip()[6:]
+			elif (com[3].strip()+" ").startswith(":!screenshot ") or (com[3].strip()+" ").startswith(":!ss "):
+				if com[3].strip().endswith("!screenshot") or com[3].strip().endswith("!ss"):
+					return "PRIVMSG "+con.channel+" :"+screengrab()
+				elif com[3].strip()[6:].lower()==con.nick.lower():
+					return "PRIVMSG "+con.channel+" :"+screengrab()
 		except Exception as e:
 			e.printargs()
 		return None
+		
+	def screengrab():
+		pass

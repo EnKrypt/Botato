@@ -15,11 +15,11 @@ $ node botato.js network-type [args...]
 You will have to pick the type of network to use first.  The only available network hook at the moment is `irc`, but you can also make your own by looking at the hook template in the `NetworkHooks` directory.  
 
 #### Using Botato via IRC
-You need supply the server, port and channel as arguments while running the program.  
+You need to supply the server, port, ssl/tls support and channel(s) as arguments while running the program.  
 Example :
 
 ```
-$ node botato.js workfra.me 6667 #bots
+$ node botato.js irc workfra.me 6667 false #bots
 ```
 
 ## Usage

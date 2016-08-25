@@ -19,7 +19,7 @@ You need to supply the server, port, ssl/tls support and channel(s) as arguments
 Example :
 
 ```
-$ node botato.js irc workfra.me 6667 false #bots
+$ node botato.js irc workfra.me 6697 true #bots
 ```
 
 ## Usage
@@ -47,7 +47,7 @@ Sending a private message to a bot (if the network supports it) might also work,
 
 * `!ping [param]` - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it simply responds with 'pong'.
 * `!ip [global | local]`- Grabs the global or local IP address of the client and returns it to the host network. If no parameter is given, it defaults to `global`.
-* `!update [version no.]` - Forces an update, such as if for some reason the auto-updater fails to work. If no parameter is given, the latest version is fetched.
+* `!update [version no.]` - Forces a manual update. If no parameter is given, the latest version is fetched.
 * `!screenshot [nick]` / `!ss [nick]` - The bot identified by the `nick` given takes a screen capture of the client's screen(if GUI enabled) and uploads the image to an image host(such as imgur) and returns the url to the host network.
 * `!download url` - Fetches resource locally from the path specified in `url`.
 * `!execute path` / `!exec path` - Executes locally the file resided at the `path` if it exists. This is similar to running an unnamed shell command with the output suppressed.

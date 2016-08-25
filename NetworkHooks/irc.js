@@ -11,9 +11,8 @@ module.exports = class Hook extends HookTemplate {
         super(); //To ensure abstraction checking
 
         this.bot = bot;
-        this.listening = false;
         this.botindex = 1;
-        this.reattemptinterval = 10; //For rejoining or reconnecting
+        this.reconnectinterval = 5;
         this.nick = this.bot.shortname;
 
         this.argumentscheck();
@@ -30,7 +29,7 @@ module.exports = class Hook extends HookTemplate {
             this.bot.args = this.bot.args.concat(rls.question('Channel (Space seperated if multiple): ').split(' '));
         } else {
             this.host = this.bot.args[1]
-            if (!/^\d+$/.test(this.bot.args[2])){
+            if (!/^\d+$/.test(this.bot.args[2])) {
                 console.log('Port should be an integer value. Reprompting.');
                 this.bot.args[2] = rls.question('Port (Default is 6667): ') || '6667'
             } else if (this.bot.args[3].toLowerCase() != 'true' && this.bot.args[3].toLowerCase() != 'false') {
@@ -55,6 +54,24 @@ module.exports = class Hook extends HookTemplate {
     }
 
     connect() {
-        console.log(this.host, this.port, this.seure, this.expectedchannels);
+        this.connection = new irc.Client(this.host, this.bot.shortname, {
+            autoRejoin: true,
+            port: this.port,
+            userName: this.bot.shortname,
+            realName: this.bot.name,
+            channels: this.expectedchannels,
+            secure: this.secure,
+            selfSigned: true,
+            floodProtection: true,
+            floodProtectionDelay: 1000,
+            retryDelay: this.reconnectinterval * 1000
+        });
+
+        this.connection.addListener('error', function(message) {
+            console.log("ERROR", message.rawCommand, message.args.join(' '));
+        });
+        this.connection.addListener('raw', function(message) {
+            console.log(message.rawCommand, message.args.join(' '));
+        });
     }
 }

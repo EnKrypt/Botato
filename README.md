@@ -22,7 +22,34 @@ Example :
 $ node botato.js irc workfra.me 6697 true #bots
 ```
 
+#### Creating a .botatorc file
+Although not mandatory, it is recommended to create a .botatorc file in your working directory.
+
+A .botatorc file is used to password protect your bot and directly provide runtime arguments. If you don't set up a password, anyone in the same network as your bot will have shell access on your device.
+
+The .botatorc file needs to be written in JSON. Here's an example with all the options that it can be used to set with their default values :
+
+```
+{
+    "args": [],
+    "shortName": "Bot",
+    "usePassword": false,
+    "password": "",
+}
+```
+
+*`args`* : Array of words that would be otherwise passed to botato via the command line. Eg: `["irc", "workfa.me", "6667", false, "#bots"]`  
+Note that in case you pass any command line arguments along with specifying this option in your .botatorc file, botato will only read your command line arguments and pretend this option was never specified.
+
+*`shortName`* : Used as primary identification for your bot on the network. In case of IRC, this would be the base nickname. Multiple bots on the same network will use this option to stack up incrementally. For example if the first bot is named `Bot`, the second bot would be `Bot1`, the third `Bot2` and so on.
+
+*`usePassword`* : Set this to `true` to use password protection. Any person on the network who wishes to control the bot needs to use the `!auth` command with the right password (see below). The hostmask of the user is registered in case of IRC to prevent identity theft. The person will then be able to issue shell commands to the bot for as long as that session persists.
+
+*`password`* : Used along with the `usePassword` option if it is set to `true` to specify the value of the password. The password is intentionally used directly as cleartext to emphasize that it should be used more like an authorization code than a layer of security. Remember that anyone having physical access to your device has already crossed the potential to deal harm that botato offers.
+
 ## Usage
+
+First, get your bot(s) running. Refer to the [Getting Started](##getting-started) section.
 
 Join the network yourself and type your command there. Every bot subscribed to the network will perform the action provided by the command.  
 Sending a private message to a bot (if the network supports it) might also work, but if your goal is to make only one bot in particular execute a command, then there are cleaner ways provided within the command syntax itself. (see below)
@@ -43,8 +70,9 @@ Sending a private message to a bot (if the network supports it) might also work,
     * Information like command history, connection events or other data specified by tasks are stored locally.
     * On the event that the bot has finished a task but cannot establish a connection to the host network, the appropriate information is stored to be sent later on request.
 
-## Commands [optional parameter]
+## Commands
 
+* `!auth password` - If a password is set up for the bot, this command needs to be issued with the right pasword before a user can send other commands to it. A good way to use this command is by sending it as a private message to the bot so that others cannot look at the password as you send it.
 * `!ping [param]` - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it simply responds with 'pong'.
 * `!ip [global | local]`- Grabs the global or local IP address of the client and returns it to the host network. If no parameter is given, it defaults to `global`.
 * `!update [version no.]` - Forces a manual update. If no parameter is given, the latest version is fetched.

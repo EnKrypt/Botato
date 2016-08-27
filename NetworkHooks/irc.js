@@ -1,6 +1,5 @@
 'use-strict';
 
-//Dependencies
 var irc = require('irc'),
     rls = require('readline-sync');
 
@@ -9,13 +8,8 @@ var HookTemplate = require('./hook');
 module.exports = class Hook extends HookTemplate {
     constructor(bot) {
         super(); //To ensure abstraction checking
-
         this.bot = bot;
-        this.botindex = 1;
-        this.reconnectinterval = 5;
-        this.nick = this.bot.shortname;
-
-        this.argumentscheck();
+        this.reconnectInterval = 5;
     }
 
     argumentscheck() { //Checks input validity and recursively prompts wherever required
@@ -45,7 +39,7 @@ module.exports = class Hook extends HookTemplate {
                         return this.argumentscheck();
                     }
                 }
-                this.expectedchannels = this.bot.args.slice(4)
+                this.expectedChannels = this.bot.args.slice(4)
                 //Checking done. Safe to leave this function now.
                 return;
             }
@@ -54,17 +48,17 @@ module.exports = class Hook extends HookTemplate {
     }
 
     connect() {
-        this.connection = new irc.Client(this.host, this.bot.shortname, {
+        this.connection = new irc.Client(this.host, this.bot.shortName, {
             autoRejoin: true,
             port: this.port,
-            userName: this.bot.shortname,
+            userName: this.bot.shortName,
             realName: this.bot.name,
-            channels: this.expectedchannels,
+            channels: this.expectedChannels,
             secure: this.secure,
             selfSigned: true,
             floodProtection: true,
             floodProtectionDelay: 1000,
-            retryDelay: this.reconnectinterval * 1000
+            retryDelay: this.reconnectInterval * 1000
         });
 
         this.connection.addListener('error', function(message) {

@@ -4,7 +4,7 @@
 
  A cross platform botnet client that makes remote management easy.
 
-## Getting Started
+# Getting Started
 
 Run the program on the command line.
 
@@ -14,7 +14,7 @@ $ node botato.js network-type [args...]
 
 You will have to pick the type of network to use first.  The only available network hook at the moment is `irc`, but you can also make your own by looking at the hook template in the `NetworkHooks` directory.  
 
-#### Using Botato via IRC
+### Using Botato via IRC
 You need to supply the server, port, ssl/tls support and channel(s) as arguments while running the program.  
 Example :
 
@@ -22,7 +22,7 @@ Example :
 $ node botato.js irc workfra.me 6697 true #bots
 ```
 
-#### Creating a .botatorc file
+### Creating a .botatorc file
 Although not mandatory, it is recommended to create a .botatorc file in your working directory.
 
 A .botatorc file is used to password protect your bot and directly provide runtime arguments. If you don't set up a password, anyone in the same network as your bot will have shell access on your device.
@@ -47,14 +47,14 @@ Note that in case you pass any command line arguments along with specifying this
 
 *`password`* : Used along with the `usePassword` option if it is set to `true` to specify the value of the password. The password is intentionally used directly as cleartext to emphasize that it should be used more like an authorization code than a layer of security. Remember that anyone having physical access to your device has already crossed the potential to deal harm that botato offers.
 
-## Usage
+# Usage
 
-First, get your bot(s) running. Refer to the [Getting Started](##getting-started) section.
+First, get your bot(s) running. Refer to the [Getting Started](#getting-started) section.
 
 Join the network yourself and type your command there. Every bot subscribed to the network will perform the action provided by the command.  
 Sending a private message to a bot (if the network supports it) might also work, but if your goal is to make only one bot in particular execute a command, then there are cleaner ways provided within the command syntax itself. (see below)
 
-## Features
+# Features
 
 * Auto connect:
     * The bot will connect to the network as directed on start-up. In case the network is down on either side, the bot continuously attempts to re-establish connection after set intervals.
@@ -70,7 +70,7 @@ Sending a private message to a bot (if the network supports it) might also work,
     * Information like command history, connection events or other data specified by tasks are stored locally.
     * On the event that the bot has finished a task but cannot establish a connection to the host network, the appropriate information is stored to be sent later on request.
 
-## Commands
+# Commands
 
 * `!auth password` - If a password is set up for the bot, this command needs to be issued with the right pasword before a user can send other commands to it. A good way to use this command is by sending it as a private message to the bot so that others cannot look at the password as you send it.
 * `!ping [param]` - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it simply responds with 'pong'.
@@ -88,12 +88,12 @@ Sending a private message to a bot (if the network supports it) might also work,
     * `!list nick` - Lists all the names of the shell instances running on the bot identified by `nick`. If any of those instances is also an interactive shell mode instance, it will be mentioned.
     * `!exit [soft | hard] [nick | name]` - To make a shell instance quit. Shell instances that are busy working on a task will not exit on a `soft` exit, whereas a `hard` exit forces the instance to close regardless. `soft` exit is useful only for closing interactive shell modes since a normal shell instance quits after its command is complete. If neither `soft` or `hard` is specified, `soft` is assumed. You can either specify a shell instance to quit with `name` or have all the shell instances in a bot quit with `nick`. If neither `nick` or `name` is provided, all the shell instances across all bots in the network will exit.
 
-## Contributing
+# Contributing
 
   * Since the nature of this project is such that peoples' intentions for using it lie in a very gray area, no part of any contribution will be allowed without proper review and testing. Try to make your code very clear for the convenience of those reviewing it.
   * Please make your pull requests point to the `testing` branch of this repo from your fork to make everyone's life easier. You may also request creating your own branch for the purpose of your contribution. Just make sure your pull request doesn't intend to merge with `master`.
 
-## License
+# License
 
 [AGPL](LICENSE.txt)
 

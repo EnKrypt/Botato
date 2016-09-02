@@ -32,17 +32,26 @@ The .botatorc file needs to be written in JSON. Here's an example with all the o
 
 ```
 {
+    "promptForArgs": true,
     "args": [],
     "shortName": "Bot",
+    "commandPrefix": "!",
+    "shellPrefix" "~",
     "usePassword": false,
     "password": "",
 }
 ```
 
+*`promptForArgs`* : Boolean value representing whether or not to prompt for the right arguments in case there is a mismatch found by the network-type. Setting this as `false` is useful when the bot is being run as a daemon, in a headless environment without console access or just for enforcing strictness.
+
 *`args`* : Array of words that would be otherwise passed to botato via the command line. Eg: `["irc", "workfa.me", "6667", false, "#bots"]`  
 Note that in case you pass any command line arguments along with specifying this option in your .botatorc file, botato will only read your command line arguments and pretend this option was never specified.
 
 *`shortName`* : Used as primary identification for your bot on the network. In case of IRC, this would be the base nickname. Multiple bots on the same network will use this option to stack up incrementally. For example if the first bot is named `Bot`, the second bot would be `Bot1`, the third `Bot2` and so on.
+
+*`commandPrefix`* : Delimiter used for signifying the beginning of a command. Any directive to the bot that is not a direct shell command must start with the character(s) specified in this option.
+
+*`shellPrefix`* : Delimiter used for signifying the beginning of a shell command. Directives starting with the character(s) in this option is acknowledged only if there is an interactive shell mode active on the bot.
 
 *`usePassword`* : Set this to `true` to use password protection. Any person on the network who wishes to control the bot needs to use the `!auth` command with the right password (see below). The hostmask of the user is registered in case of IRC to prevent identity theft. The person will then be able to issue shell commands to the bot for as long as that session persists.
 

@@ -1,7 +1,10 @@
 [![Botato Logo](https://i.imgur.com/KLD48pY.png)](https://github.com/EnKrypt/Botato)
 
-[![Build](https://img.shields.io/travis/EnKrypt/Botato.svg)](https://travis-ci.org/EnKrypt/Botato)
-[![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://raw.githubusercontent.com/EnKrypt/Botato/master/LICENSE)  
+[![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://raw.githubusercontent.com/EnKrypt/Botato/master/LICENSE)
+
+Master branch : [![Build-master](https://img.shields.io/travis/EnKrypt/Botato/master.svg)](https://travis-ci.org/EnKrypt/Botato)
+
+Testing branch : [![Build-testing](https://img.shields.io/travis/EnKrypt/Botato/testing.svg)](https://github.com/EnKrypt/Botato/tree/testing)
 
  A cross platform botnet client that makes remote management easy.
 

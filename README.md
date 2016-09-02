@@ -1,5 +1,6 @@
 [![Botato Logo](https://i.imgur.com/KLD48pY.png)](https://github.com/EnKrypt/Botato)
 
+[![Build](https://img.shields.io/travis/EnKrypt/Botato.svg)](https://travis-ci.org/EnKrypt/Botato)
 [![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://raw.githubusercontent.com/EnKrypt/Botato/master/LICENSE)  
 
  A cross platform botnet client that makes remote management easy.

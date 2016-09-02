@@ -28,9 +28,20 @@ describe('Botato', function() {
     describe('Command', function() {
         describe('!ping', function() {
             it('responds with given value', function() {
-                require('../../commands/ping')(['this', 'is', 'a', 'test'], function(out) {
+                require('../../commands/ping')({}, '', ['this', 'is', 'a', 'test'], function(out) {
                     expect(out).toBe('PONG this is a test');
                 });
+            });
+        });
+        describe('!auth', function() {
+            it('adds a client having the right password to the authorized list', function() {
+                var client = 'Test!Bot@D199B241.9A78455E.C6E678A9.IP';
+                var bot = {
+                    authorized: [],
+                    password: 'sup3r s3cr3t passw0rd'
+                };
+                require('../../commands/auth')(bot, client, ['sup3r', 's3cr3t', 'passw0rd'], function() {});
+                expect(bot.authorized.indexOf(client)).not.toBe(-1);
             });
         });
     });

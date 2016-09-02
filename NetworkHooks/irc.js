@@ -66,7 +66,6 @@ module.exports = class Hook extends HookTemplate {
             console.log("ERROR", message);
         });
         this.connection.addListener('raw', function(message) {
-            console.log(message.rawCommand, message.args.join(' ')); //For testing. Remove in release
             if (message.rawCommand=='PRIVMSG'){
                 this.perform(this.bot, message.prefix, message.args.slice(1).join(' ').trim().split(' '));
             }

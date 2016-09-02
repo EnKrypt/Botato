@@ -1,2 +1,6 @@
 # Hide the .botatorc file if created by a developer of this project
 .botatorc
+
+# Node specific directories and files
+node_modules
+npm-debug.log

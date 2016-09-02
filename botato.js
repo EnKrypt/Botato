@@ -7,13 +7,18 @@ if (!bot.args.length) {
     console.log('Usage : node botato.js network-type [args...]\nOr have the network-type and arguments specified in a .botatorc file');
 } else {
     try {
-        bot.connection = new (require('./NetworkHooks/' + bot.noSpecialChars(bot.args[0])))(bot)
+        bot.connection = new (require('./NetworkHooks/' + bot.noSpecialChars(bot.args[0])))(bot, require('./parse'));
     } catch (e) {
-        console.log('No such network-type - ' + bot.args[0]);
+        if (e.code === 'MODULE_NOT_FOUND') {
+            console.log('No such network-type - ' + bot.args[0]);
+        } else {
+            console.log(e);
+        }
         return;
     }
     if (bot.warn) {
         bot.showWarning(bot.warn);
+        bot.warn = "";
     }
     bot.connection.argumentscheck();
     bot.connection.connect();

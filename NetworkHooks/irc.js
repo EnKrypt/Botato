@@ -1,4 +1,4 @@
-'use-strict';
+'use strict';
 
 var irc = require('irc'),
     rls = require('readline-sync');
@@ -6,9 +6,10 @@ var irc = require('irc'),
 var HookTemplate = require('./hook');
 
 module.exports = class Hook extends HookTemplate {
-    constructor(bot) {
+    constructor(bot, perform) {
         super(); //To ensure abstraction checking
         this.bot = bot;
+        this.perform = perform;
         this.reconnectInterval = 5;
     }
 
@@ -62,10 +63,21 @@ module.exports = class Hook extends HookTemplate {
         });
 
         this.connection.addListener('error', function(message) {
-            console.log("ERROR", message.rawCommand, message.args.join(' '));
+            console.log("ERROR", message);
         });
         this.connection.addListener('raw', function(message) {
-            console.log(message.rawCommand, message.args.join(' '));
-        });
+            console.log(message.rawCommand, message.args.join(' ')); //For testing. Remove in release
+            if (message.rawCommand=='PRIVMSG'){
+                this.perform(this.bot, message.prefix, message.args.slice(1).join(' ').trim().split(' '));
+            }
+        }.bind(this));
+    }
+
+    send(message) {
+        for (var key in this.connection.chans) {
+            if (this.connection.chans.hasOwnProperty(key)) {
+                this.connection.say(key, message);
+            }
+        }
     }
 }

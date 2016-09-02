@@ -15,10 +15,17 @@ module.exports = class HookTemplate {
         }
 
         /* Override 'connect'
-         * Establishes connection. May be reused for reconnecting in case of a disconnect.
+         * Establishes connection. May be reused for reconnecting in case of a disconnect, depending on implementation.
          */
         if (this.connect === undefined) {
             throw new TypeError("Must override function 'connect' in network-type class");
+        }
+
+        /* Override 'send'
+         * Well configured wrapper around the output method of the network-type library.
+         */
+        if (this.send === undefined) {
+            throw new TypeError("Must override function 'send' in network-type class");
         }
     }
 }

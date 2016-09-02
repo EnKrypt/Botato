@@ -23,9 +23,10 @@ module.exports = {
     name: 'Botato',
     shells: [],
     history: [],
+    promptForArgs: config.promptForArgs || true, //Set to false while running purely headless or for strictness testing
     args: process.argv.slice(2).length ? process.argv.slice(2) : (config.args ? config.args : []),
     shortName: config.shortName || 'Bot',
-    commandPrefix: config.prefix || '!',
+    commandPrefix: config.commandPrefix || '!',
     shellPrefix: config.shellPrefix || '~',
     usePassword: config.usePassword || false,
     password: config.password,

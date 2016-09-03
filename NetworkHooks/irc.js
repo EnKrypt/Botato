@@ -70,7 +70,7 @@ module.exports = class Hook extends HookTemplate {
         });
         this.connection.addListener('raw', function(message) {
             if (message.rawCommand=='PRIVMSG'){
-                this.perform(this.bot, message.prefix, message.args.slice(1).join(' ').trim().split(' '));
+                this.perform(this.bot, this.connection.nick, message.prefix, message.args.slice(1).join(' ').trim().split(' '));
             }
         }.bind(this));
     }

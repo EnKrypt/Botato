@@ -37,6 +37,8 @@ The .botatorc file needs to be written in JSON. Here's an example with all the o
 
 ```
 {
+    "autoUpdate": true,
+    "updateInterval": 18000000,
     "promptForArgs": true,
     "args": [],
     "shortName": "Bot",
@@ -47,6 +49,10 @@ The .botatorc file needs to be written in JSON. Here's an example with all the o
     "password": "",
 }
 ```
+
+*`autoUpdate`* : If this is set to `false`, the bot will not perform any checks for updates. By default, this option is set to `true`, which makes it perform an update if it finds one.
+
+*`updateInterval`* : After how long the bot should keep checking for updates if `autoUpdate` is set to true. Note that the bot checks for updates during start up, and the interval begins after that check. This option is specified in milliseconds.
 
 *`promptForArgs`* : Boolean value representing whether or not to prompt for the right arguments in case there is a mismatch found by the network-type. Setting this as `false` is useful when the bot is being run as a daemon, in a headless environment without console access or just for enforcing strictness.
 

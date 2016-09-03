@@ -33,6 +33,7 @@ module.exports = {
     shortName: config.shortName || 'Bot',
     commandPrefix: config.commandPrefix || '!',
     shellPrefix: config.shellPrefix || '~',
+    nickSeperator: config.nickSeperator || '@',
     usePassword: config.usePassword || false,
     password: config.password,
     warn: warning,

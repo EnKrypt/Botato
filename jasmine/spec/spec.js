@@ -44,5 +44,12 @@ describe('Botato', function() {
                 expect(bot.authorized.indexOf(client)).not.toBe(-1);
             });
         });
+        describe('!address', function() {
+            it('contains at least the loopback address', function() {
+                require('../../commands/address')({}, '', [], function(text) {
+                    expect(out.includes('127.0.0.1')).toBe(true);
+                });
+            });
+        });
     });
 });

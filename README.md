@@ -89,7 +89,7 @@ Sending a private message to a bot (if the network supports it) might also work,
 
 * `!ping [param]` - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it simply responds with 'pong'.
 * `!auth password` - If a password is set up for the bot, this command needs to be issued with the right pasword before a user can send other commands to it. A good way to use this command is by sending it as a private message to the bot so that others cannot look at the password as you send it.
-* `!ip [global | local]`- Grabs the global or local IP address of the client and returns it to the host network. If no parameter is given, it defaults to `global`.
+* `!address [global | local]`- Grabs the IP and MAC addresses from the client's network interfaces and displays it in the host network. `global` displays only the WAN facing IP address (if available). If no parameter is given, it displays details for both.
 * `!update [version no.]` - Forces a manual update. If no parameter is given, the latest version is fetched.
 * `!screenshot [nick]` / `!ss [nick]` - The bot identified by the `nick` given takes a screen capture of the client's screen(if GUI enabled) and uploads the image to an image host(such as imgur) and returns the url to the host network.
 * `!download url` - Fetches resource locally from the path specified in `url`.

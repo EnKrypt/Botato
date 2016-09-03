@@ -1,3 +1,13 @@
 language: node_js
 node_js:
  - "6"
+before_deploy:
+ - zip -r botato-${TRAVIS_TAG:1}.zip .
+deploy:
+    provider: releases
+    api_key: "${GITHUB_KEY}"
+    file_glob: true
+    file: "botato-*.zip"
+    skip_cleanup: true
+    on:
+        tags: true

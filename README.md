@@ -41,7 +41,8 @@ The .botatorc file needs to be written in JSON. Here's an example with all the o
     "args": [],
     "shortName": "Bot",
     "commandPrefix": "!",
-    "shellPrefix" "~",
+    "shellPrefix": "~",
+    "nickSeperator": "@",
     "usePassword": false,
     "password": "",
 }
@@ -58,6 +59,8 @@ Note that in case you pass any command line arguments along with specifying this
 
 *`shellPrefix`* : Delimiter used for signifying the beginning of a shell command. Directives starting with the character(s) in this option is acknowledged only if there is an interactive shell mode active on the bot.
 
+*`nickSeperator`* : Delimiter used to separate nicks in [the command syntax](#commands) to target only specific bots. Note that doing so is optional, and when no separated nicks are mentioned, all bots in the network will perform the given command.
+
 *`usePassword`* : Set this to `true` to use password protection. Any person on the network who wishes to control the bot needs to use the `!auth` command with the right password (see below). The hostmask of the user is registered in case of IRC to prevent identity theft. The person will then be able to issue shell commands to the bot for as long as that session persists.
 
 *`password`* : Used along with the `usePassword` option if it is set to `true` to specify the value of the password. The password is intentionally used directly as cleartext to emphasize that it should be used more like an authorization code than a layer of security. Remember that anyone having physical access to your device has already crossed the potential to deal harm that botato offers.
@@ -66,7 +69,7 @@ Note that in case you pass any command line arguments along with specifying this
 
 First, get your bot(s) running. Refer to the [Getting Started](#getting-started) section.
 
-Join the network yourself and type your command there. Every bot subscribed to the network will perform the action provided by the command.  
+Join the network yourself and type your command there. Every bot subscribed to the network will perform the action provided by the command. Take a look at [the command syntax](#commands) to learn how to select only certain bots or use custom delimiters.  
 Sending a private message to a bot (if the network supports it) might also work, but if your goal is to make only one bot in particular execute a command, then there are cleaner ways provided within the command syntax itself. (see below)
 
 # Features
@@ -87,21 +90,42 @@ Sending a private message to a bot (if the network supports it) might also work,
 
 # Commands
 
+Commands in general follow the syntax given below:
+
+```
+<commandPrefix><command name><nickSeperator><nick1><nickSeperator><nick2..> <arg1> <arg2..>
+```
+
+For example, here is how you would make all bots in the network respond to a ping command:
+
+```
+$ !ping
+```
+
+And here is how you would make only `Bot13`, `Bot14` and `Bot15` spit out their public IP addresses:
+
+```
+$ !address@Bot13@Bot14@Bot15 global
+```
+
+To learn more about how to set custom delimiters like `commandPrefix` or `nickSeperator` along with their default values, take a look at the [creating a .botatorc file](#creating-a-botatorc-file) section.  
+Commands below use the default delimiters without selecting any nicks. Parameters in square brackets `[]` are optional.
+
 * `!ping [param]` - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it simply responds with 'pong'.
 * `!auth password` - If a password is set up for the bot, this command needs to be issued with the right pasword before a user can send other commands to it. A good way to use this command is by sending it as a private message to the bot so that others cannot look at the password as you send it.
 * `!address [global | local]`- Grabs the IP and MAC addresses from the client's network interfaces and displays it in the host network. `global` displays only the WAN facing IP address (if available). If no parameter is given, it displays details for both.
 * `!update [version no.]` - Forces a manual update. If no parameter is given, the latest version is fetched.
-* `!screenshot [nick]` / `!ss [nick]` - The bot identified by the `nick` given takes a screen capture of the client's screen(if GUI enabled) and uploads the image to an image host(such as imgur) and returns the url to the host network.
+* `!screenshot` / `!ss` - The bot takes a screen capture of the client's screen and uploads the image to an image host (such as imgur) and returns the url to the host network. This command will give an error for bots that are running headless without a display server.
 * `!download url` - Fetches resource locally from the path specified in `url`.
 * `!execute path` / `!exec path` - Executes locally the file resided at the `path` if it exists. This is similar to running an unnamed shell command with the output suppressed.
-* `!shell nick [name] [command]` - If `command` is provided, executes it in a shell instance, otherwise enters interactive shell mode on the bot identified by the `nick` provided. If `name` is defined, assigns that name (must be unique for that bot) to the shell instance, otherwise a random name is assigned. You can use the name to do things like write to stdin, suppress stdout, exit that shell instance, etc. (see below)
-    * `~command` - To run a shell command in interactive shell mode. Eg: `~echo test` or `~shutdown -h now`. This can be daisy-chained to have the same command run by all bots put to interactive shell mode.
+* `!shell [name] [command]` - If `command` is provided, executes it in a shell instance, otherwise enters interactive shell mode on the bot. If `name` is defined, assigns that name (must be unique for that bot) to the shell instance, otherwise a random name is assigned. You can use the name to do things like write to stdin, suppress stdout, exit that shell instance, etc. (see below)
+    * `<shellPrefix>command` - To run a shell command in interactive shell mode. Eg: `~echo test` or `~shutdown -h now`. This can be daisy-chained to have the same command run by all bots put to interactive shell mode. These commands do not strictly follow the vanilla command syntax.
     * The interactive shell mode is blocking i.e. you cannot run more than one shell command at the same time using it or have more than one interactive shell mode active in a bot at once. You can however run more than one shell command in the same bot by using the `!shell` command with the `command` parameter. Each shell instance (including the interactive shell mode) will run independent of each other.
     * `!suppress name` - Suppresses output of the shell instance to which that name is assigned so that the stdout from any commands running in it won't be printed. All bots having a shell instance with that name will be affected by it.
     * `!visible name` - Same as above except it has the opposite effect i.e. it removes output suppression if applicable.
     * `!stdin name characters` - Writes `characters` to the stdin of any command running in the identified shell instance. Useful for commands that require prompting such as `apt-get` or `sudo`.
     * `!list nick` - Lists all the names of the shell instances running on the bot identified by `nick`. If any of those instances is also an interactive shell mode instance, it will be mentioned.
-    * `!exit [soft | hard] [nick | name]` - To make a shell instance quit. Shell instances that are busy working on a task will not exit on a `soft` exit, whereas a `hard` exit forces the instance to close regardless. `soft` exit is useful only for closing interactive shell modes since a normal shell instance quits after its command is complete. If neither `soft` or `hard` is specified, `soft` is assumed. You can either specify a shell instance to quit with `name` or have all the shell instances in a bot quit with `nick`. If neither `nick` or `name` is provided, all the shell instances across all bots in the network will exit.
+    * `!exit [soft | hard] [name]` - To make a shell instance quit. Shell instances that are busy working on a task will not exit on a `soft` exit, whereas a `hard` exit forces the instance to close regardless. `soft` exit is useful only for closing interactive shell modes since a normal shell instance quits after its command is complete. If neither `soft` or `hard` is specified, `soft` is assumed. You can either specify a shell instance to quit with `name` or have all the shell instances in a bot quit if it is not provided. If no specific bot(s) are selected in the commend syntax, all the shell instances across all bots in the network will exit.
 
 # Contributing
 

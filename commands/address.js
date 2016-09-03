@@ -14,7 +14,7 @@ module.exports = function(bot, from, args, out) {
     } else if (args[0].toLowerCase() == 'local') {
         local(out);
     } else {
-        out('!address: Invalid parameter');
+        out('Invalid parameter', true);
     }
 }
 

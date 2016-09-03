@@ -75,10 +75,10 @@ module.exports = class Hook extends HookTemplate {
         }.bind(this));
     }
 
-    send(message) {
+    send(command, message, showCommand=false) {
         for (var key in this.connection.chans) {
             if (this.connection.chans.hasOwnProperty(key)) {
-                this.connection.say(key, message);
+                this.connection.say(key, (showCommand ? (command + ': ') : '') + message);
             }
         }
     }

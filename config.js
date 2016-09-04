@@ -7,7 +7,10 @@ var config = {};
 var warning = "";
 
 var showWarning = function(warn) {
-    rls.question(warn, {hideEchoBack: true, mask: ''});
+    rls.question(warn, {
+        hideEchoBack: true,
+        mask: ''
+    });
 };
 
 try {
@@ -22,12 +25,13 @@ try {
 }
 
 module.exports = {
-    version: 0.1,
+    version: 'v0.1.0',
     release: 'alpha',
     name: 'Botato',
     shells: [],
     history: [],
     authorized: [],
+    updateURL: 'https://api.github.com/repos/EnKrypt/Botato/release/',
     autoUpdate: (typeof config.autoUpdate === 'undefined') ? true : config.autoUpdate,
     updateInterval: config.updateInterval || 18000000,
     promptForArgs: config.promptForArgs || true, //Set to false while running purely headless or for strictness testing

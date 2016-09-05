@@ -1,17 +1,25 @@
 'use strict';
 
-var fs = require('fs'),
+var fork = require('child_process').fork,
+    fs = require('fs-extra'),
     rls = require('readline-sync');
 
 var config = {};
 var warning = "";
-
+var hasUpdate = false;
 var showWarning = function(warn) {
     rls.question(warn, {
         hideEchoBack: true,
         mask: ''
     });
 };
+
+try {
+    var stats = fs.statSync('update');
+        if (stats.isDirectory()) {
+            hasUpdate = true;
+        }
+} catch (e) {}
 
 try {
     var rcFile = fs.readFileSync('.botatorc', 'utf8');
@@ -31,6 +39,7 @@ module.exports = {
     shells: [],
     history: [],
     authorized: [],
+    hasUpdate: hasUpdate,
     updateURL: 'https://api.github.com/repos/EnKrypt/Botato/release/',
     autoUpdate: (typeof config.autoUpdate === 'undefined') ? true : config.autoUpdate,
     updateInterval: config.updateInterval || 18000000,
@@ -51,5 +60,21 @@ module.exports = {
         } else {
             throw new Error('Special characters not allowed');
         }
+    },
+    doUpdate: function(bot) {
+        fs.readdir('./', function(err, list = []) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i] != 'update' && list[i] != '.botato' && list[i] != 'node_modules') {
+                    fs.removeSync(list[i]);
+                }
+            }
+            fs.copy('update/', './', {
+                clobber: true
+            }, function() {
+                fs.remove('update', function() {
+                    fork('botato.js', bot.args);
+                });
+            });
+        });
     }
 };

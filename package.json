@@ -4,11 +4,12 @@
     "description": "A cross platform botnet client that makes remote management easy",
     "main": "botato.js",
     "dependencies": {
-        "fs": "^0.0.1-security",
+        "fs-extra": "^0.30.0",
         "irc": "^0.5.0",
         "readline-sync": "^1.4.4",
         "request": "^2.74.0",
-        "semver": "^5.3.0"
+        "semver": "^5.3.0",
+        "unzip": "^0.1.11"
     },
     "devDependencies": {
         "jasmine": "^2.3.2"

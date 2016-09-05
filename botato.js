@@ -3,9 +3,9 @@
 //Initialize bot with required configuration
 var bot = require('./config');
 
-function(isCallback) {
+(function run(isCallback) {
     if (bot.autoUpdate && (!isCallback)) {
-        require('./commands/update')(bot, '', [], console.log, arguments.callee.bind(this, true));
+        require('./commands/update')(bot, '', [], console.log, run.bind(this, true));
         setInterval(function() {
             require('./commands/update')(bot, '', [], bot.connection.send.bind(bot.connection, 'update'));
         }, bot.updateInterval);
@@ -31,7 +31,11 @@ function(isCallback) {
             bot.warn = "";
         }
         bot.connection.argumentscheck();
-        bot.connection.connect();
-        //That's pretty much it. Reconecting and errors are handled internally by network-type
+        if (bot.hasUpdate) {
+            bot.doUpdate(bot);
+        } else {
+            bot.connection.connect();
+            //That's pretty much it. Reconecting and errors are handled internally by network-type
+        }
     }
-}(false);
+})(false);

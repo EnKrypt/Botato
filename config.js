@@ -40,7 +40,7 @@ module.exports = {
     history: [],
     authorized: [],
     hasUpdate: hasUpdate,
-    updateURL: 'https://api.github.com/repos/EnKrypt/Botato/release/',
+    updateURL: 'https://api.github.com/repos/EnKrypt/Botato/releases/',
     autoUpdate: (typeof config.autoUpdate === 'undefined') ? true : config.autoUpdate,
     updateInterval: config.updateInterval || 18000000,
     promptForArgs: config.promptForArgs || true, //Set to false while running purely headless or for strictness testing
@@ -61,7 +61,8 @@ module.exports = {
             throw new Error('Special characters not allowed');
         }
     },
-    doUpdate: function(bot) {
+    doUpdate: function(bot, out) {
+        out('Applying update..');
         fs.readdir('./', function(err, list = []) {
             for (var i = 0; i < list.length; i++) {
                 if (list[i] != 'update' && list[i] != '.botato' && list[i] != 'node_modules') {

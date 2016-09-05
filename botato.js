@@ -5,7 +5,7 @@ var bot = require('./config');
 
 (function run(isCallback) {
     if (bot.autoUpdate && (!isCallback)) {
-        require('./commands/update')(bot, '', [], console.log, run.bind(this, true));
+        require('./commands/update')(bot, '', [], console.log, run.bind(this, true), true);
         setInterval(function() {
             require('./commands/update')(bot, '', [], bot.connection.send.bind(bot.connection, 'update'));
         }, bot.updateInterval);
@@ -32,8 +32,9 @@ var bot = require('./config');
         }
         bot.connection.argumentscheck();
         if (bot.hasUpdate) {
-            bot.doUpdate(bot);
+            bot.doUpdate(bot, console.log);
         } else {
+            console.log('Connecting with args: ', bot.args);
             bot.connection.connect();
             //That's pretty much it. Reconecting and errors are handled internally by network-type
         }

@@ -5,7 +5,7 @@ var fs = require('fs-extra'),
     sv = require('semver'),
     unzip = require('unzip');
 
-module.exports = function(bot, from, args, out, callback = function() {}) {
+module.exports = function(bot, from, args, out, callback = function() {}, init = false) {
     out('Checking for updates..');
     request({
         url: bot.updateURL + (args[0] ? 'tags/v' + args[0] : 'latest'),
@@ -16,14 +16,20 @@ module.exports = function(bot, from, args, out, callback = function() {}) {
         if (!error && response.statusCode == 200) {
             var releaseInfo = JSON.parse(body);
             if (sv.lt(bot.version, releaseInfo.tag_name)) {
-                out('Updating to ' + releaseInfo.tag_name);
+                out('Downloading updates for ' + releaseInfo.tag_name);
                 fs.remove('update', function() {
                     fs.mkdir('update', function() {
                         var count = releaseInfo.assets.length;
-                        var doUpdate = function() {
+                        var decrement = function() {
                             count -= 1;
                             if (!count) {
-                                out('Update(s) downloaded. Restart required before it takes effect.');
+                                bot.hasUpdate = true;
+                                out('Update(s) downloaded');
+                                if (init) {
+                                    callback();
+                                } else {
+                                    out('Restart required before updates take effect');
+                                }
                             }
                         };
                         for (var key in releaseInfo.assets) {
@@ -34,10 +40,10 @@ module.exports = function(bot, from, args, out, callback = function() {}) {
                                             path: 'update'
                                         }).on('close', function() {
                                             fs.unlink('update/' + releaseInfo.assets[key].name);
-                                            doUpdate();
+                                            decrement();
                                         }));
                                     } else {
-                                        doUpdate();
+                                        decrement();
                                     }
                                 }));
                             }

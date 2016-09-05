@@ -5,7 +5,6 @@ before_deploy:
  - rm -rf .git/
  - rm -rf jasmine/
  - rm -rf node_modules/
- - rm .botatorc
  - rm .gitignore
  - rm .travis.yml
  - zip -r botato-${TRAVIS_TAG:1}.zip .

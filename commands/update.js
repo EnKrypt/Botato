@@ -6,7 +6,7 @@ var fs = require('fs-extra'),
     unzip = require('unzip');
 
 module.exports = function(bot, from, args, out, callback = function() {}, init = false) {
-    out('Checking for updates..');
+    out('Checking for updates');
     request({
         url: bot.updateURL + (args[0] ? 'tags/v' + args[0] : 'latest'),
         headers: {
@@ -16,7 +16,7 @@ module.exports = function(bot, from, args, out, callback = function() {}, init =
         if (!error && response.statusCode == 200) {
             var releaseInfo = JSON.parse(body);
             if (sv.lt(bot.version, releaseInfo.tag_name)) {
-                out('Downloading updates for ' + releaseInfo.tag_name);
+                out('Downloading updates to ' + releaseInfo.tag_name);
                 fs.remove('update', function() {
                     fs.mkdir('update', function() {
                         var count = releaseInfo.assets.length;

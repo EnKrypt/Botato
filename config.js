@@ -62,19 +62,13 @@ module.exports = {
         }
     },
     doUpdate: function(bot, out) {
-        out('Applying update..');
-        fs.readdir('./', function(err, list = []) {
-            for (var i = 0; i < list.length; i++) {
-                if (list[i] != 'update' && list[i] != '.botato' && list[i] != 'node_modules') {
-                    fs.removeSync(list[i]);
-                }
-            }
-            fs.copy('update/', './', {
-                clobber: true
-            }, function() {
-                fs.remove('update', function() {
-                    fork('botato.js', bot.args);
-                });
+        out('Applying update');
+        fs.copy('update/', './', {
+            clobber: true
+        }, function() {
+            fs.remove('update', function() {
+                out('Relaunching ' + bot.name);
+                fork('botato.js', bot.args);
             });
         });
     }

@@ -4,6 +4,7 @@ var fork = require('child_process').fork,
     fs = require('fs-extra'),
     rls = require('readline-sync');
 
+var project = {};
 var config = {};
 var warning = "";
 var hasUpdate = false;
@@ -22,20 +23,31 @@ try {
 } catch (e) {}
 
 try {
+    var projectFile = fs.readFileSync('package.json', 'utf8');
+    project = JSON.parse(projectFile);
+} catch (e) {
+    //Show the warning right in the beginning
+    showWarning('The package.json file was missing from the working directory or it is not valid JSON. Auto updates will be disabled, and you might encounter unexpected behavior. Make sure the project was downloaded/installed properly. Press Enter to continue anyway');
+    hasUpdate = false;
+}
+
+try {
     var rcFile = fs.readFileSync('.botatorc', 'utf8');
     try {
         config = JSON.parse(rcFile);
     } catch (ex) {
-        showWarning('The .botatorc file that was found is not valid JSON. Press Enter to use default config values'); //Show the warning right here as there is no other appropriate place to do so
+        //Show the warning right in the beginning
+        showWarning('The .botatorc file that was found is not valid JSON. Press Enter to use default config values');
     }
 } catch (e) {
     warning = 'No .botatorc file found in working directory. It is recommended to create one to password protect your bot and skip manually typing runtime arguments. With the default config values, everyone in the same network will have shell access to your device. Press Enter if you know what you\'re doing';
 }
 
 module.exports = {
-    version: 'v0.1.0',
+    name: project.name || 'Botato',
+    executable: project.main || 'botato.js',
+    version: project.version,
     release: 'alpha',
-    name: 'Botato',
     shells: [],
     history: [],
     authorized: [],
@@ -68,7 +80,7 @@ module.exports = {
         }, function() {
             fs.remove('update', function() {
                 out('Relaunching ' + bot.name);
-                fork('botato.js', bot.args);
+                fork(bot.main, bot.args);
             });
         });
     }

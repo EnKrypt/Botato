@@ -4,3 +4,6 @@
 # Node specific directories and files
 node_modules
 npm-debug.log
+
+# Ignore generated zip during build deployment for publishing to npm
+botato-*.zip

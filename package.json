@@ -13,10 +13,10 @@
         "unzip": "^0.1.11"
     },
     "devDependencies": {
-        "jasmine": "^2.3.2"
+        "jasmine": "2.3.2"
     },
     "scripts": {
-        "test": "cd jasmine && jasmine"
+        "test": "cp package.json jasmine/package.json && cd jasmine && jasmine && rm package.json"
     },
     "repository": {
         "type": "git",

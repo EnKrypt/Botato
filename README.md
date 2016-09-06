@@ -12,13 +12,32 @@
 
 # Getting Started
 
-Run the program on the command line.
+Install using npm with the global flag
+
+```
+$ npm install -g botato
+```
+
+Then run the executable on the command line
+
+```
+$ botato network-type [args...]
+```
+
+If you don't want to use npm, you can also download [a release](https://github.com/EnKrypt/Botato/releases) (simplest way to just get it running), or clone the repository (recommended if you plan to contribute to Botato).  
+Go to the working directory and install dependencies by running:
+
+```
+$ npm install
+```
+
+Then run `botato.js` on the command line
 
 ```
 $ node botato.js network-type [args...]
 ```
 
-You will have to pick the type of network to use first.  The only available network hook at the moment is `irc`, but you can also make your own by looking at the hook template in the `NetworkHooks` directory.  
+The first argument is the type of network you want to use. The only available network hook at the moment is `irc`, but you can also make your own by looking at the hook template in `NetworkHooks/hook.js`.
 
 ### Using Botato via IRC
 You need to supply the server, port, ssl/tls support and channel(s) as arguments while running the program.  

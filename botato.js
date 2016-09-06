@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 
 //Initialize bot with required configuration

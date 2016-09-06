@@ -1,5 +1,7 @@
 [![Botato Logo](https://i.imgur.com/KLD48pY.png)](https://github.com/EnKrypt/Botato)
 
+[![NPM-Version](https://img.shields.io/npm/v/botato.svg)](npmjs.com/package/botato)
+
 [![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://raw.githubusercontent.com/EnKrypt/Botato/master/LICENSE)
 
 [![Branch-master](https://img.shields.io/badge/branch-master-8855aa.svg?style=flat-square)](https://github.com/EnKrypt/Botato)

@@ -8,15 +8,13 @@ before_deploy:
  - rm .travis.yml
  - zip -r botato-${TRAVIS_TAG:1}.zip .
 deploy:
-    provider: releases
+  - provider: releases
     api_key: "${GITHUB_KEY}"
     file_glob: true
     file: "botato-*.zip"
     skip_cleanup: true
     on:
-        tags: true
-    provider: npm
-    api_key: "$(NPM_KEY)"
-    skip_cleanup: true
-    on:
-        tags: true
+      tags: true
+after_deploy:
+ - echo "//registry.npmjs.org/:_authToken=${NPM_KEY}" > ~/.npmrc
+ - npm publish

@@ -4,6 +4,7 @@ var os = require('os'),
     request = require('request');
 
 module.exports = function(bot, from, args, out) {
+    //If no args, display verbose
     if (!args.length) {
         global(out, function() {
             out(' \r\nInterface | MAC address | IP address');
@@ -18,6 +19,7 @@ module.exports = function(bot, from, args, out) {
     }
 }
 
+//To show Public IP
 var global = function(out, callback, noargs) {
     request('https://api.ipify.org', function (error, response, body) {
         if (!error && response.statusCode == 200) {
@@ -33,6 +35,7 @@ var global = function(out, callback, noargs) {
     });
 };
 
+//To show network interfaces, their mac addresses and local IPs
 var local = function(out) {
     var interfaces = os.networkInterfaces();
     for (var key in interfaces) {

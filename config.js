@@ -6,6 +6,7 @@ var fork = require('child_process').fork,
     path = require('path'),
     rls = require('readline-sync');
 
+//Initialize some parameters that will be used before module.exports can be set
 var autoUpdate = true;
 var hasUpdate = false;
 var botPath = __dirname;
@@ -19,6 +20,7 @@ var showWarning = function(warn) {
     });
 };
 
+//If the update/ directory exists, the program is waiting to apply an update
 try {
     var stats = fs.statSync(path.join(botPath, 'update'));
         if (stats.isDirectory()) {
@@ -26,6 +28,7 @@ try {
         }
 } catch (e) {}
 
+//Some parameters are fetched from package.json
 try {
     var projectFile = fs.readFileSync(path.join(botPath, 'package.json'), 'utf8');
     project = JSON.parse(projectFile);
@@ -35,28 +38,28 @@ try {
     autoUpdate = false;
 }
 
-try {
+//Other parameters are fetched from a .botatorc file
+try { //Check in working directory first
     var rcFile = fs.readFileSync(path.join(botPath, '.botatorc'), 'utf8');
     try {
         config = JSON.parse(rcFile);
     } catch (ex) {
-        //Show the warning right in the beginning
-        showWarning('The .botatorc file found in your working directory is not valid JSON. Press Enter to use default config values');
+        warning = 'The .botatorc file found in your working directory is not valid JSON. Press Enter to use default config values';
     }
 } catch (e) {
-    try {
+    try { //Check in home directory next
         var rcHomeFile = fs.readFileSync(path.join(os.homedir(), '.botatorc'), 'utf8');
         try {
             config = JSON.parse(rcHomeFile);
         } catch (exh) {
-            //Show the warning right in the beginning
-            showWarning('The .botatorc file found in your home directory is not valid JSON. Press Enter to use default config values');
+            warning = 'The .botatorc file found in your home directory is not valid JSON. Press Enter to use default config values';
         }
     } catch (e) {
         warning = 'No .botatorc file found in working directory or your home directory. It is recommended to create one to password protect your bot and skip manually typing runtime arguments. With the default config values, everyone in the same network will have shell access to your device. Press Enter if you know what you\'re doing';
     }
 }
 
+//Finally bundle all the parameters into an object and export it
 module.exports = {
     shells: [],
     history: [],
@@ -95,7 +98,7 @@ module.exports = {
         }, function() {
             fs.remove(path.join(botPath, 'update'), function() {
                 out('Relaunching ' + bot.name);
-                fork(bot.main, bot.args);
+                fork(bot.executable, bot.args);
             });
         });
     }

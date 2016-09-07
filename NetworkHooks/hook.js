@@ -1,5 +1,8 @@
 'use-strict';
 
+//This is the hook template for network-types
+//To make your own network-type hook, create a class that extends this one
+//Make sure all functions mentioned below are overriden
 module.exports = class HookTemplate {
     constructor() {
         if (new.target === HookTemplate) {

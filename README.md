@@ -50,7 +50,7 @@ $ node botato.js irc workfra.me 6697 true #bots
 ```
 
 ### Creating a .botatorc file
-Although not mandatory, it is recommended to create a .botatorc file in your working directory.
+Although not mandatory, it is recommended to create a .botatorc file in your working directory or your home directory (the working directory takes precedence).
 
 A .botatorc file is used to password protect your bot and directly provide runtime arguments. If you don't set up a password, anyone in the same network as your bot will have shell access on your device.
 

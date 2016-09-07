@@ -65,6 +65,7 @@ module.exports = class Hook extends HookTemplate {
             retryDelay: this.reconnectInterval * 1000
         });
 
+        //Handlers for incoming messages and error events
         this.connection.addListener('error', function(message) {
             console.log("ERROR", message);
         });
@@ -76,6 +77,8 @@ module.exports = class Hook extends HookTemplate {
     }
 
     send(command, message, showCommand=false) {
+        //Output to every channel connected
+        //TODO: Implement channel suppressing
         for (var key in this.connection.chans) {
             if (this.connection.chans.hasOwnProperty(key)) {
                 this.connection.say(key, (showCommand ? (command + ': ') : '') + message);

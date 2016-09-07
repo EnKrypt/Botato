@@ -8,7 +8,7 @@ var fork = require('child_process').fork,
 
 var autoUpdate = true;
 var hasUpdate = false;
-var botpath = __dirname;
+var botPath = __dirname;
 var project = {};
 var config = {};
 var warning = "";
@@ -20,14 +20,14 @@ var showWarning = function(warn) {
 };
 
 try {
-    var stats = fs.statSync('update');
+    var stats = fs.statSync(path.join(botPath, 'update'));
         if (stats.isDirectory()) {
             hasUpdate = true;
         }
 } catch (e) {}
 
 try {
-    var projectFile = fs.readFileSync('package.json', 'utf8');
+    var projectFile = fs.readFileSync(path.join(botPath, 'package.json'), 'utf8');
     project = JSON.parse(projectFile);
 } catch (e) {
     //Show the warning right in the beginning
@@ -36,7 +36,7 @@ try {
 }
 
 try {
-    var rcFile = fs.readFileSync('.botatorc', 'utf8');
+    var rcFile = fs.readFileSync(path.join(botPath, '.botatorc'), 'utf8');
     try {
         config = JSON.parse(rcFile);
     } catch (ex) {
@@ -65,7 +65,7 @@ module.exports = {
     executable: project.main || 'botato.js',
     version: project.version,
     release: 'alpha',
-    path: botpath,
+    path: botPath,
     hasUpdate: hasUpdate,
     updateURL: 'https://api.github.com/repos/EnKrypt/Botato/releases/',
     autoUpdate: (!autoUpdate) ? autoUpdate : ((typeof config.autoUpdate === 'undefined') ? autoUpdate : config.autoUpdate),
@@ -90,10 +90,10 @@ module.exports = {
     },
     doUpdate: function(bot, out) {
         out('Applying update');
-        fs.copy('update/', './', {
+        fs.copy(path.join(botPath, 'update/'), botPath, {
             clobber: true
         }, function() {
-            fs.remove('update', function() {
+            fs.remove(path.join(botPath, 'update'), function() {
                 out('Relaunching ' + bot.name);
                 fork(bot.main, bot.args);
             });

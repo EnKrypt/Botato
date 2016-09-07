@@ -1,5 +1,8 @@
 #!/usr/bin/env node
-
+//PUT COMMENTS
+//USE DIRNAMES
+//CHANGE UPDATE CHECKING LOCATIOM
+//WHY DOES CODE STILL RUN
 'use strict';
 
 //Initialize bot with required configuration

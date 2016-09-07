@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs-extra'),
+    path = require('path'),
     request = require('request'),
     sv = require('semver'),
     unzip = require('unzip');
@@ -17,8 +18,8 @@ module.exports = function(bot, from, args, out, callback = function() {}, init =
             var releaseInfo = JSON.parse(body);
             if (sv.lt(bot.version, releaseInfo.tag_name)) {
                 out('Downloading updates to ' + releaseInfo.tag_name);
-                fs.remove('update', function() {
-                    fs.mkdir('update', function() {
+                fs.remove(path.join(bot.path, 'update'), function() {
+                    fs.mkdir(path.join(bot.path, 'update'), function() {
                         var count = releaseInfo.assets.length;
                         var decrement = function() {
                             count -= 1;
@@ -34,12 +35,12 @@ module.exports = function(bot, from, args, out, callback = function() {}, init =
                         };
                         for (var key in releaseInfo.assets) {
                             if (releaseInfo.assets.hasOwnProperty(key)) {
-                                request(releaseInfo.assets[key].browser_download_url).pipe(fs.createWriteStream('update/' + releaseInfo.assets[key].name).on('finish', function() {
+                                request(releaseInfo.assets[key].browser_download_url).pipe(fs.createWriteStream(path.join(bot.path, 'update', releaseInfo.assets[key].name)).on('finish', function() {
                                     if (releaseInfo.assets[key].content_type == 'application/zip') {
-                                        fs.createReadStream('update/' + releaseInfo.assets[key].name).pipe(unzip.Extract({
-                                            path: 'update'
+                                        fs.createReadStream(path.join(bot.path, 'update', releaseInfo.assets[key].name)).pipe(unzip.Extract({
+                                            path: path.join(bot.path, 'update')
                                         }).on('close', function() {
-                                            fs.unlink('update/' + releaseInfo.assets[key].name);
+                                            fs.unlink(path.join(bot.path, 'update/', releaseInfo.assets[key].name));
                                             decrement();
                                         }));
                                     } else {

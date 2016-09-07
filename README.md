@@ -138,9 +138,10 @@ $ !address@Bot13@Bot14@Bot15 global
 To learn more about how to set custom delimiters like `commandPrefix` or `nickSeperator` along with their default values, take a look at the [creating a .botatorc file](#creating-a-botatorc-file) section.  
 Commands below use the default delimiters without selecting any nicks. Parameters in square brackets `[]` are optional.
 
-* `!ping [param]` - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it simply responds with 'pong'.
 * `!auth password` - If a password is set up for the bot, this command needs to be issued with the right pasword before a user can send other commands to it. A good way to use this command is by sending it as a private message to the bot so that others cannot look at the password as you send it.
-* `!address [global | local]`- Grabs the IP and MAC addresses from the client's network interfaces and displays it in the host network. `global` displays only the WAN facing IP address (if available). If no parameter is given, it displays details for both.
+* `!ping [param]` - Simple ping-pong to measure lag and response of the bot. The bot will pong back with `param` if given, else it simply responds with 'pong'.
+* `!info [version | updates]` - Displays basic information about the bot instance. Using the `version` flag only displays botato's version number. Using the `updates` flag only shows if you have pending updates waiting to be applied. Not supplying any arguments will show verbose information on all data relevant to the bot.
+* `!address [global | local]`- Grabs the IP and MAC addresses from the client's network interfaces and displays it in the host network. `global` displays only the WAN facing IP address (if available). If no parameter is given, it displays details in verbose for both.
 * `!update [version no.]` - Forces a manual update. If no parameter is given, the latest version is fetched.
 * `!screenshot` / `!ss` - The bot takes a screen capture of the client's screen and uploads the image to an image host (such as imgur) and returns the url to the host network. This command will give an error for bots that are running headless without a display server.
 * `!download url` - Fetches resource locally from the path specified in `url`.

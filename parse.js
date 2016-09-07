@@ -10,6 +10,13 @@ module.exports = function(bot, you, from, args) {
         if ((!bot.usePassword) || (bot.authorized.indexOf(from) > -1 || command == 'auth')) {
             try { //Dynamically fire the appropriate command
                 require('./commands/' + bot.noSpecialChars(command))(bot, from, args.slice(1), out);
+                //Add to command history
+                bot.history.push({
+                    command: command,
+                    args: args.slice(1),
+                    raw: args,
+                    from: from
+                });
             } catch (e) {
                 if (e.code === 'MODULE_NOT_FOUND') {
                     out(command + " is not a valid command");

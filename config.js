@@ -2,13 +2,16 @@
 
 var fork = require('child_process').fork,
     fs = require('fs-extra'),
+    os = require('os'),
+    path = require('path'),
     rls = require('readline-sync');
 
+var autoUpdate = true;
+var hasUpdate = false;
+var botpath = __dirname;
 var project = {};
 var config = {};
 var warning = "";
-var autoUpdate = true;
-var hasUpdate = false;
 var showWarning = function(warn) {
     rls.question(warn, {
         hideEchoBack: true,
@@ -38,20 +41,31 @@ try {
         config = JSON.parse(rcFile);
     } catch (ex) {
         //Show the warning right in the beginning
-        showWarning('The .botatorc file that was found is not valid JSON. Press Enter to use default config values');
+        showWarning('The .botatorc file found in your working directory is not valid JSON. Press Enter to use default config values');
     }
 } catch (e) {
-    warning = 'No .botatorc file found in working directory. It is recommended to create one to password protect your bot and skip manually typing runtime arguments. With the default config values, everyone in the same network will have shell access to your device. Press Enter if you know what you\'re doing';
+    try {
+        var rcHomeFile = fs.readFileSync(path.join(os.homedir(), '.botatorc'), 'utf8');
+        try {
+            config = JSON.parse(rcHomeFile);
+        } catch (exh) {
+            //Show the warning right in the beginning
+            showWarning('The .botatorc file found in your home directory is not valid JSON. Press Enter to use default config values');
+        }
+    } catch (e) {
+        warning = 'No .botatorc file found in working directory or your home directory. It is recommended to create one to password protect your bot and skip manually typing runtime arguments. With the default config values, everyone in the same network will have shell access to your device. Press Enter if you know what you\'re doing';
+    }
 }
 
 module.exports = {
+    shells: [],
+    history: [],
+    authorized: [],
     name: project.name || 'Botato',
     executable: project.main || 'botato.js',
     version: project.version,
     release: 'alpha',
-    shells: [],
-    history: [],
-    authorized: [],
+    path: botpath,
     hasUpdate: hasUpdate,
     updateURL: 'https://api.github.com/repos/EnKrypt/Botato/releases/',
     autoUpdate: (!autoUpdate) ? autoUpdate : ((typeof config.autoUpdate === 'undefined') ? autoUpdate : config.autoUpdate),

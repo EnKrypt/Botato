@@ -45,10 +45,28 @@ describe('Botato', function() {
             });
         });
         describe('!address', function() {
-            it('contains at least the loopback address', function() {
+            it('contains at least the loopback address', function(done) {
+                var output = '';
                 require('../../commands/address')({}, '', [], function(text) {
-                    expect(out.includes('127.0.0.1')).toBe(true);
+                    output += '\n' + text;
                 });
+                setTimeout(function() {
+                    expect(output.includes('127.0.0.1')).toBe(true);
+                    done();
+                }, 3000);
+            });
+        });
+        describe('!info', function() {
+            it('contains at least the bot\'s version', function(done) {
+                var bot = require('../../config');
+                var output = '';
+                require('../../commands/info')(bot, '', [], function(text) {
+                    output += '\n' + text;
+                });
+                setTimeout(function() {
+                    expect(output.includes(bot.version)).toBe(true);
+                    done();
+                }, 3000)
             });
         });
     });

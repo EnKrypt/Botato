@@ -1,6 +1,7 @@
 'use strict';
 
-var fork = require('child_process').fork,
+var imgur = require('imgur'),
+    fork = require('child_process').fork,
     fs = require('fs-extra'),
     os = require('os'),
     path = require('path'),
@@ -19,6 +20,8 @@ var showWarning = function(warn) {
         mask: ''
     });
 };
+
+imgur.setClientId('0e74360592046d7');
 
 //If the update/ directory exists, the program is waiting to apply an update
 try {
@@ -69,6 +72,7 @@ module.exports = {
     version: project.version,
     release: 'alpha',
     path: botPath,
+    imgur: imgur,
     hasUpdate: hasUpdate,
     updateURL: 'https://api.github.com/repos/EnKrypt/Botato/releases/',
     autoUpdate: (!autoUpdate) ? autoUpdate : ((typeof config.autoUpdate === 'undefined') ? autoUpdate : config.autoUpdate),

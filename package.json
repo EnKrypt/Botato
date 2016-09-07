@@ -1,39 +1,41 @@
 {
-    "name": "botato",
-    "version": "0.1.3",
-    "description": "A cross platform botnet client that makes remote management easy",
-    "main": "botato.js",
-    "bin": "botato.js",
-    "dependencies": {
-        "fs-extra": "^0.30.0",
-        "irc": "^0.5.0",
-        "readline-sync": "^1.4.4",
-        "request": "^2.74.0",
-        "semver": "^5.3.0",
-        "unzip": "^0.1.11"
-    },
-    "devDependencies": {
-        "jasmine": "2.3.2"
-    },
-    "scripts": {
-        "test": "cp package.json jasmine/package.json && cd jasmine && jasmine && rm package.json"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/EnKrypt/Botato.git"
-    },
-    "author": "EnKrypt",
-    "license": "AGPL-3.0",
-    "bugs": {
-        "url": "https://github.com/EnKrypt/Botato/issues"
-    },
-    "homepage": "https://github.com/EnKrypt/Botato#readme",
-    "keywords": [
-        "botato",
-        "bot",
-        "bots",
-        "botnet",
-        "remote",
-        "network"
-    ]
+  "name": "botato",
+  "version": "0.1.3",
+  "description": "A cross platform botnet client that makes remote management easy",
+  "main": "botato.js",
+  "bin": "botato.js",
+  "dependencies": {
+    "desktop-screenshot": "^0.1.1",
+    "fs-extra": "^0.30.0",
+    "imgur": "^0.1.7",
+    "irc": "^0.5.0",
+    "readline-sync": "^1.4.4",
+    "request": "^2.74.0",
+    "semver": "^5.3.0",
+    "unzip": "^0.1.11"
+  },
+  "devDependencies": {
+    "jasmine": "2.3.2"
+  },
+  "scripts": {
+    "test": "cp package.json jasmine/package.json && cd jasmine && jasmine && rm package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EnKrypt/Botato.git"
+  },
+  "author": "EnKrypt",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/EnKrypt/Botato/issues"
+  },
+  "homepage": "https://github.com/EnKrypt/Botato#readme",
+  "keywords": [
+    "botato",
+    "bot",
+    "bots",
+    "botnet",
+    "remote",
+    "network"
+  ]
 }

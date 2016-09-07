@@ -7,6 +7,7 @@ var fork = require('child_process').fork,
 var project = {};
 var config = {};
 var warning = "";
+var autoUpdate = true;
 var hasUpdate = false;
 var showWarning = function(warn) {
     rls.question(warn, {
@@ -27,8 +28,8 @@ try {
     project = JSON.parse(projectFile);
 } catch (e) {
     //Show the warning right in the beginning
-    showWarning('The package.json file was missing from the working directory or it is not valid JSON. Auto updates will be disabled, and you might encounter unexpected behavior. Make sure the project was downloaded/installed properly. Press Enter to continue anyway');
-    hasUpdate = false;
+    showWarning('The package.json file is missing from the working directory or it is not valid JSON. Auto updates will be disabled, and you might encounter unexpected behavior. Make sure the project was downloaded/installed properly. Press Enter to continue anyway');
+    autoUpdate = false;
 }
 
 try {
@@ -53,9 +54,9 @@ module.exports = {
     authorized: [],
     hasUpdate: hasUpdate,
     updateURL: 'https://api.github.com/repos/EnKrypt/Botato/releases/',
-    autoUpdate: (typeof config.autoUpdate === 'undefined') ? true : config.autoUpdate,
+    autoUpdate: (!autoUpdate) ? autoUpdate : ((typeof config.autoUpdate === 'undefined') ? autoUpdate : config.autoUpdate),
     updateInterval: config.updateInterval || 18000000,
-    promptForArgs: config.promptForArgs || true, //Set to false while running purely headless or for strictness testing
+    promptForArgs: (typeof config.promptForArgs === 'undefined') ? true : config.autoUpdate, //Set to false while running purely headless or for strictness testing
     args: process.argv.slice(2).length ? process.argv.slice(2) : (config.args ? config.args : []),
     shortName: config.shortName || 'Bot',
     commandPrefix: config.commandPrefix || '!',

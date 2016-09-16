@@ -66,7 +66,19 @@ describe('Botato', function() {
                 setTimeout(function() {
                     expect(output.includes(bot.version)).toBe(true);
                     done();
-                }, 3000)
+                }, 3000);
+            });
+        });
+        describe('!exit', function() {
+            it('should use process.exit to quit the bot', function(done) {
+                var bot = require('../../config');
+                var restore = process.exit;
+                process.exit = function(code) {
+                    expect(code).toBe(0);
+                    process.exit = restore;
+                    done();
+                };
+                require('../../commands/exit')(bot, '', [], function() {});
             });
         });
     });

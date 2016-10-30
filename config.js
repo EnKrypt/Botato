@@ -2,6 +2,7 @@
 
 var imgur = require('imgur'),
     fork = require('child_process').fork,
+    spawn = require('child_process').spawn,
     fs = require('fs-extra'),
     os = require('os'),
     path = require('path'),
@@ -93,6 +94,69 @@ module.exports = {
             return str;
         } else {
             throw new Error('Special characters not allowed');
+        }
+    },
+    addShell: function(bot, id, command) {
+        var proc = spawn(command[0], command.slice(1), {
+            detached: true,
+            stdio: ['pipe', 'pipe', 'pipe']
+        });
+        bot.shells.push({
+            id: id,
+            interactive: false,
+            running: false,
+            suppressed: false,
+            command: command,
+            process: proc
+        });
+    },
+    removeShell: function(bot, id) {
+        for (var key in bot.shells) {
+            if (bot.shells[key].id == id) {
+                bot.shells.splice(key, 1);
+            }
+        }
+    },
+    removeInteractive: function(bot, id, out) {
+        var key = -1;
+        for (var index in bot.shells) {
+            if (bot.shells[index].id == id) {
+                key = index;
+            }
+        }
+        if (bot.shells[key]) {
+            if (bot.shells[key].interactive) {
+                bot.shells[key].interactive = false;
+                if (bot.shells[key].running) {
+                    out('Removed interactive mode on shell with ID: ' + bot.shells[key].id + ' - It will be closed when its current job is done');
+                } else {
+                    bot.removeShell(bot, key);
+                    out('Closed idle interactive shell with ID: ' + bot.shells[key].id);
+                }
+            } else {
+                out('Shell with ID: ' + id + ' is not in interactive mode');
+            }
+        } else {
+            out('No shell found with ID: ' + id);
+        }
+    },
+    makeInteractive: function(bot, id, out) {
+        var set = false;
+        for (var key in bot.shells) {
+            if (bot.shells[key].interactive) {
+                bot.removeInteractive(bot, bot.shells[key].id, out);
+            } else if (bot.shells[key].id == id) {
+                if (!bot.shells[key].interactive) {
+                    bot.shells[key].interactive = true;
+                    out('Shell with ID: ' + id + ' is now in interactive mode');
+                    set = true;
+                } else {
+                    out('Shell with ID: ' + id + ' is already in interactive mode');
+                }
+            }
+        }
+        if (!set) {
+            out('No shell found with ID: ' + id);
         }
     },
     doUpdate: function(bot, out) {

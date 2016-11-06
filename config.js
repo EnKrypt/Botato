@@ -152,25 +152,24 @@ module.exports = {
         }
     },
     removeInteractive: function(bot, id, out) {
-        var key = -1;
-        for (var index in bot.shells) {
-            if (bot.shells[index].id == id) {
-                key = index;
+        var flag = true;
+        for (var key in bot.shells) {
+            if (bot.shells[key].id == id) {
+                flag = false;
+                if (bot.shells[key].interactive) {
+                    bot.shells[key].interactive = false;
+                    if (bot.shells[key].running) {
+                        out('Removed interactive mode on a shell with ID: ' + bot.shells[key].id + ' - It will be closed when its current job is done');
+                    } else {
+                        bot.removeShell(bot, key);
+                        out('Closed idle interactive shell with ID: ' + bot.shells[key].id);
+                    }
+                } else {
+                    out('Shell with ID: ' + id + ' is not in interactive mode');
+                }
             }
         }
-        if (bot.shells[key]) {
-            if (bot.shells[key].interactive) {
-                bot.shells[key].interactive = false;
-                if (bot.shells[key].running) {
-                    out('Removed interactive mode on shell with ID: ' + bot.shells[key].id + ' - It will be closed when its current job is done');
-                } else {
-                    bot.removeShell(bot, key);
-                    out('Closed idle interactive shell with ID: ' + bot.shells[key].id);
-                }
-            } else {
-                out('Shell with ID: ' + id + ' is not in interactive mode');
-            }
-        } else {
+        if (flag) {
             out('No shell found with ID: ' + id);
         }
     },
@@ -180,10 +179,10 @@ module.exports = {
             if (bot.shells[key].interactive) {
                 bot.removeInteractive(bot, bot.shells[key].id, out);
             } else if (bot.shells[key].id == id) {
+                set = true;
                 if (!bot.shells[key].interactive) {
                     bot.shells[key].interactive = true;
                     out('Shell with ID: ' + id + ' is now in interactive mode');
-                    set = true;
                 } else {
                     out('Shell with ID: ' + id + ' is already in interactive mode');
                 }

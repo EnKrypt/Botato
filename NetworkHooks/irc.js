@@ -32,11 +32,11 @@ module.exports = class Hook extends HookTemplate {
             this.host = this.bot.args[1]
             if (!/^\d+$/.test(this.bot.args[2])) {
                 this.bot.args[2] = resolve('Port should be an integer value.', true, 'Port (Default is 6667): ') || '6667'
-            } else if (this.bot.args[3].toLowerCase() != 'true' && this.bot.args[3].toLowerCase() != 'false') {
+            } else if (("" + this.bot.args[3]).toLowerCase() != 'true' && ("" + this.bot.args[3]).toLowerCase() != 'false') {
                 this.bot.args[3] = resolve('SSL/TLS option needs to be either true or false.', true, 'SSL/TLS? true|false (Default is false): ') || 'false'
             } else {
                 this.port = parseInt(this.bot.args[2]);
-                this.secure = this.bot.args[3].toLowerCase() == 'true';
+                this.secure = ("" + this.bot.args[3]).toLowerCase() == 'true';
                 for (var i = 4; i < this.bot.args.length; i++) {
                     if ((this.bot.args[i].length > 24) || (!/^[a-zA-Z0-9- ]*$/.test(this.bot.args[i].slice(1))) || (this.bot.args[i].charAt(0) != '#')) {
                         this.bot.args = this.bot.args.slice(0, 4).concat(resolve('All channel names should start with #, be less than 24 characters and not contain special characters.', true, 'Channel (Space seperated if multiple): ').split(' '));

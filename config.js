@@ -96,19 +96,53 @@ module.exports = {
             throw new Error('Special characters not allowed');
         }
     },
+    shellWithIDexists: function(bot, id) {
+        if (!id) {
+            return true;
+        }
+        for (var key in bot.shells) {
+            if (bot.shells[key].id == id) {
+                return true;
+            }
+        }
+        return false;
+    },
     addShell: function(bot, id, command) {
-        var proc = spawn(command[0], command.slice(1), {
-            detached: true,
-            stdio: ['pipe', 'pipe', 'pipe']
-        });
-        bot.shells.push({
+        var shellObject = {
             id: id,
             interactive: false,
-            running: false,
+            running: command.length ? true : false,
             suppressed: false,
-            command: command,
-            process: proc
-        });
+            verbose: true,
+            command: command
+        };
+        if (command.length) {
+            var proc = spawn(command[0], command.slice(1), {
+                detached: true,
+                stdio: ['pipe', 'pipe', 'pipe']
+            });
+            proc.stdout.on('data', function(data) {
+                if (shellObject.verbose) {
+                    bot.connection.send('Shell ' + shellObject.id, data.toString('utf8'), false);
+                }
+            });
+            proc.stderr.on('data', function(data) {
+                if (shellObject.verbose) {
+                    bot.connection.send('Shell ' + shellObject.id, data.toString('utf8'), false);
+                }
+            });
+            proc.on('close', function(code) {
+                if (shellObject.verbose) {
+                    bot.connection.send('Shell ' + shellObject.id, ' exited with code: ' + code, true);
+                }
+                shellObject.running = false;
+                if (!shellObject.interactive) {
+                    bot.removeShell(bot, shellObject.id);
+                }
+            });
+            shellObject.proc = proc;
+        }
+        bot.shells.push(shellObject);
     },
     removeShell: function(bot, id) {
         for (var key in bot.shells) {

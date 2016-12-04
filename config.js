@@ -107,40 +107,44 @@ module.exports = {
         }
         return false;
     },
+    // I unfortunately gave my word to someone that this would be what I would call this next function
+    createChildren: function(bot, shellObject, command) {
+        var proc = spawn(command[0], command.slice(1), {
+            detached: true,
+            stdio: ['pipe', 'pipe', 'pipe']
+        });
+        proc.stdout.on('data', function(data) {
+            bot.connection.send('Shell ' + shellObject.id, data.toString('utf8'), false);
+        });
+        proc.stderr.on('data', function(data) {
+            bot.connection.send('Shell ' + shellObject.id, data.toString('utf8'), false);
+        });
+        proc.on('close', function(code) {
+            if (shellObject.verbose) {
+                bot.connection.send('Shell ' + shellObject.id, 'exited with code: ' + code, true);
+            }
+            shellObject.running = false;
+            if (!shellObject.interactive) {
+                bot.removeShell(bot, shellObject.id);
+            }
+        });
+        proc.on('error', function(err) {
+            bot.connection.send('Shell ' + shellObject.id, 'Could not run command `' + command.join(' ') + '`', true);
+            console.log('Error while running shell command', err);
+        });
+        return proc;
+    },
     addShell: function(bot, id, command) {
         var shellObject = {
             id: id,
             interactive: false,
             running: command.length ? true : false,
-            suppressed: false,
+            suppressed: [],
             verbose: true,
             command: command
         };
         if (command.length) {
-            var proc = spawn(command[0], command.slice(1), {
-                detached: true,
-                stdio: ['pipe', 'pipe', 'pipe']
-            });
-            proc.stdout.on('data', function(data) {
-                if (shellObject.verbose) {
-                    bot.connection.send('Shell ' + shellObject.id, data.toString('utf8'), false);
-                }
-            });
-            proc.stderr.on('data', function(data) {
-                if (shellObject.verbose) {
-                    bot.connection.send('Shell ' + shellObject.id, data.toString('utf8'), false);
-                }
-            });
-            proc.on('close', function(code) {
-                if (shellObject.verbose) {
-                    bot.connection.send('Shell ' + shellObject.id, ' exited with code: ' + code, true);
-                }
-                shellObject.running = false;
-                if (!shellObject.interactive) {
-                    bot.removeShell(bot, shellObject.id);
-                }
-            });
-            shellObject.proc = proc;
+            shellObject.proc = bot.createChildren(bot, shellObject, command);
         }
         bot.shells.push(shellObject);
     },
@@ -150,6 +154,19 @@ module.exports = {
                 bot.shells.splice(key, 1);
             }
         }
+    },
+    runShellCommand: function(bot, command) {
+        var interactiveShellObject = bot.shells[bot.getInteractiveIndex(bot)];
+        interactiveShellObject.verbose = false;
+        interactiveShellObject.proc = bot.createChildren(bot, interactiveShellObject, command);
+    },
+    getInteractiveIndex: function(bot) {
+        for (var key in bot.shells) {
+            if (bot.shells[key].interactive) {
+                return key;
+            }
+        }
+        return -1;
     },
     removeInteractive: function(bot, id, out) {
         var flag = true;
